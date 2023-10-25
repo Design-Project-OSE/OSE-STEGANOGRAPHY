@@ -1,97 +1,121 @@
 import customtkinter as ctg
+import CTkMessagebox as ctmb
 from PIL import Image
-from tkinter import filedialog as fd
-import librosa
-import pyautogui
+from Project_Tools import * 
 
 
-
-class MyTabView(ctg.CTkTabview):
-    def __init__(self, master, **kwargs):
-        super().__init__(master, **kwargs)
-
-        # create tabs
-        self.add("Image")
-        self.add("Voice")
-
-        #Global Varible
-        global select_image_loc
-        global select_voice_loc
-
-        def event_button_image_add():
-            global select_image_loc
-            self.select_image_name=fd.askopenfilename()
-            select_image_loc=self.select_image_name
-            self.select_image=ctg.CTkImage(Image.open(f"{self.select_image_name}"),size=(100,100))
-            self.label_select_image=ctg.CTkLabel(
-                master=self.tab("Image")
-                ,image=self.select_image
-                ,width=100
-                ,height=100
-                ,text=""
-            )
-            self.label_select_image.grid(row=1,column=0,padx=20,pady=10)
-            print(select_image_loc)
-
-        def event_button_voice_add():
-            global select_voice_loc
-            self.select_voice_name=fd.askopenfilename()
-            select_voice_loc=self.select_voice_name
-            # Voice file load
-            self.select_voice=librosa.load(self.select_voice_name)
-
-        # add widgets on images tabs
-        self.image_add=ctg.CTkImage(Image.open("Project_Images\\SeyfDesigner.png"),size=(50,50))
-        self.button_image_add = ctg.CTkButton(
-            master=self.tab("Image")
-            ,image=self.image_add
-            ,text=""
-            ,width=50
-            ,height=50
-            ,command=event_button_image_add
-            )
-        self.button_image_add.grid(row=0, column=0, padx=20, pady=10)
-        # add widgets on voices tabs
-        self.image_voice=ctg.CTkImage(Image.open("Project_Images\\afif_fudin.png"),size=(50,50))
-        self.button_voice_add=ctg.CTkButton(
-            master=self.tab("Voice")
-            ,image=self.image_voice
-            ,text=""
-            ,width=50
-            ,height=50
-            ,command=event_button_voice_add
-        )
-        self.button_voice_add.grid(row=0,column=0,padx=20,pady=10)
-
-
+from PIL import Image
+info=Get_Info()
+tl_file=File_Tool()
 class App(ctg.CTk):
     def __init__(self):
         super().__init__()
-
-        #Display size 
-        widht_size,height_size=pyautogui.size()
+        #Bilgisayarın ekran boyutu bilgisini alıyor
+        
+        self.widht_size,self.height_size=info.screen_size()
 
         #ekran kaplama alanını ayarlamak için (400 önerilir)
-        widht_size-=400
-        height_size-=400
+        self.widht_size-=400
+        self.height_size-=400
 
 
         #App configure
         self.title("Project OSE")
-        self.iconbitmap("Project_Images\\freepick.ico")
-        self.geometry(f"{widht_size}x{height_size}")
+        self.iconbitmap("Project_Images\\logo.ico")
+        self.geometry(f"{self.widht_size}x{self.height_size}")
+        print(f"{self.widht_size}x{self.height_size}")
 
 
         # Frame Configure
-        self.frame_main=ctg.CTkFrame(master=self,width=(widht_size/4),height=height_size-20)
+        self.frame_main=ctg.CTkFrame(master=self,width=(self.widht_size/4),height=self.height_size-20)
         self.frame_main.grid(row=0,column=0,padx=10,pady=10)
 
-        self.frame_tabview=ctg.CTkFrame(master=self,width=(3*(widht_size/4))-60,height=height_size-20)
+        self.frame_tabview=ctg.CTkFrame(master=self,width=(3*(self.widht_size/4))-60,height=self.height_size-20)
         self.frame_tabview.grid(row=0,column=1,padx=10,pady=10)
 
 
-        self.tab_view = MyTabView(master=self.frame_tabview,width=(3*(widht_size/4))-60,height=height_size-40)
+        self.tab_view = MyTabView(master=self.frame_tabview,width=(3*(self.widht_size/4))-60,height=self.height_size-40)
         self.tab_view.grid(row=0, column=0, padx=10, pady=10)
+
+
+class MyTabView(ctg.CTkTabview):
+    def __init__(self,master,**kwargs):
+        super().__init__(master,**kwargs)
+        self.widht_size,self.height_size=info.screen_size()
+
+        #Sekme isimleri
+        self.name_tab_image="IMAGE HIDE TEXT"
+        self.name_tab_voice="VOİCE HIDE TEXT"
+
+        #Dosyaların adresleri
+        self.loc_addimage="Project_Images\\add_image.png"
+        self.loc_addvoice="Project_Images\\add_voice.png"
+        self.loc_download="Project_Images\\download.png"
+        self.loc_imageframe="Project_Images\\image_frame.png"
+        self.loc_playvoice="Project_Images\\play_voice.png"
+        self.loc_save="Project_Images\\save.png"
+        self.loc_stopvoice="Project_Images\\stop_voice.png"
+        self.loc_voice="Project_Images\\voice.png"
+
+
+        #Sekme Ekleme
+        self.add(self.name_tab_image)
+        self.add(self.name_tab_voice)
+
+        #Button resimleri butim= Button İmage
+        self.butim_addimage=ctg.CTkImage(Image.open(self.loc_addimage),size=(50,50))
+        self.butim_addvoice=ctg.CTkImage(Image.open(self.loc_addvoice),size=(50,50))
+        self.butim_download=ctg.CTkImage(Image.open(self.loc_download),size=(50,50))
+        self.butim_imageframe=ctg.CTkImage(Image.open(self.loc_imageframe),size=((3*(self.widht_size/16)-20),self.height_size/2-40))
+        self.butim_playvoice=ctg.CTkImage(Image.open(self.loc_playvoice),size=(50,50))
+        self.butim_save=ctg.CTkImage(Image.open(self.loc_save),size=(50,50))
+        self.butim_stopvoice=ctg.CTkImage(Image.open(self.loc_stopvoice),size=(50,50))
+        self.butim_voice=ctg.CTkImage(Image.open(self.loc_voice),size=(50,50))
+
+
+        #RESİM İÇİNE METİN GİZLEME ALANI İÇİN 
+        #frameler
+
+        self.frame_tabimage=ctg.CTkFrame(master=self.tab(self.name_tab_image),width=(3*(self.widht_size/16)),height=self.height_size/2-20)
+        self.frame_tabimage.grid(row=1,column=0,padx=10,pady=10)
+
+        self.frame_button_tabimage=ctg.CTkFrame(master=self.tab(self.name_tab_image),width=120,height=self.height_size/2-20)
+        self.frame_button_tabimage.grid(row=1,column=1,padx=10,pady=10)
+
+        self.frame_tabtextbox=ctg.CTkFrame(master=self.tab(self.name_tab_image),width=(3*(self.widht_size/16)),height=self.height_size/2-20)
+        self.frame_tabtextbox.grid(row=1,column=2,padx=10,pady=10)
+
+        self.frame_button_tabtextbox=ctg.CTkFrame(master=self.tab(self.name_tab_image),width=120,height=self.height_size/2-20)
+        self.frame_button_tabtextbox.grid(row=1,column=3,padx=10,pady=10)
+
+
+        #Eventler
+        def event_button_open_image():
+            self.loc_file_image=tl_file.open_file()
+            self.open_image=ctg.CTkImage(Image.open(self.loc_file_image),size=(((3*(self.widht_size/16)-40),self.height_size/2-60)))
+            self.ilabel_frimage.configure(image=self.open_image)
+
+        #Buttonlar
+        self.button_open_image=ctg.CTkButton(
+            master=self.frame_button_tabimage,
+            image=self.butim_addimage,
+            width=50,
+            height=50,
+            text=None,
+            command=event_button_open_image,
+            fg_color="transparent"
+        )
+        self.button_open_image.grid(row=0,column=0,padx=10,pady=10)
+        
+
+        #Resim Alanı
+        self.ilabel_frimage=ctg.CTkLabel(master=self.frame_tabimage,
+        width=(3*(self.widht_size/16))-20,
+        height=self.height_size/2-40,
+        text="",
+        image=self.butim_imageframe)
+        self.ilabel_frimage.grid(row=0,column=0,padx=10,pady=10) 
+       
 
 
 app = App()
