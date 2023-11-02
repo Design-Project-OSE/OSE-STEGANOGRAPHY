@@ -32,6 +32,9 @@ class File_Tool:
 
         return loc_save
 
+    def bos():
+        print("")
+
 
 
 class Get_Info:
