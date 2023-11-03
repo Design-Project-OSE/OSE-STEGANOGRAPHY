@@ -27,7 +27,6 @@ class App(ctg.CTk):
         self.geometry(f"{self.widht_size}x{self.height_size}")
         self.resizable(width=False,height=False)
 
-
         # Frame Configure
         self.frame_main=ctg.CTkFrame(master=self,width=(self.widht_size/4),height=self.height_size-20)
         self.frame_main.grid(row=0,column=0,padx=10,pady=10)
@@ -38,6 +37,16 @@ class App(ctg.CTk):
 
         self.tab_view = MyTabView(master=self.frame_tabview,width=(3*(self.widht_size/4))-60,height=self.height_size-40)
         self.tab_view.grid(row=0, column=0, padx=10, pady=10)
+
+        #Logo ekleme
+        self.loc_main_logo="Project_Images\\logo.png"
+        self.image_logo=ctg.CTkImage(Image.open(self.loc_main_logo),size=((self.widht_size/4),(self.height_size-20)/4))
+        self.ilabel_image_logo=ctg.CTkLabel(master=self.frame_main,
+        text="",
+        image=self.image_logo,
+        width=(self.widht_size/4),
+        height=((self.height_size-20)/4))
+        self.ilabel_image_logo.grid(row=0,column=0,padx=10,pady=10)
 
 
 class MyTabView(ctg.CTkTabview):
@@ -50,40 +59,28 @@ class MyTabView(ctg.CTkTabview):
         self.name_tab_voice="VOİCE HIDE TEXT"
 
         #Dosyaların adresleri
-        self.loc_addimage="Project_Images\\add_image.png"
-        self.loc_addvoice="Project_Images\\add_voice.png"
-        self.loc_download="Project_Images\\download.png"
-        self.loc_imageframe="Project_Images\\image_frame.png"
-        self.loc_playvoice="Project_Images\\play_voice.png"
-        self.loc_save="Project_Images\\save.png"
-        self.loc_stopvoice="Project_Images\\stop_voice.png"
-        self.loc_voice="Project_Images\\voice.png"
-        self.loc_saveimage="Project_Images\\save_image.png"
-        self.loc_key="Project_Images\\key.png"
-        self.loc_clean="Project_Images\\clean.png"
-        self.loc_nonshow="Project_Images\\nonshow.png"
-        self.loc_show="Project_Images\\show.png"
-        self.loc_savebutton="Project_Images\\savebutton.png"
+        self.loc_imagetab_addimage="Project_Images\\add_image.png"
+        self.loc_imagetab_imageframe="Project_Images\\image_frame.png"
+        self.loc_imagetab_saveimage="Project_Images\\save_image.png"
+        self.loc_general_key="Project_Images\\key.png"
+        self.loc_general_clean="Project_Images\\clean.png"
+        self.loc_general_nonshow="Project_Images\\nonshow.png"
+        self.loc_general_show="Project_Images\\show.png"
+        self.loc_general_savebutton="Project_Images\\savebutton.png"
 
         #Sekme Ekleme
         self.add(self.name_tab_image)
         self.add(self.name_tab_voice)
 
         #Button resimleri butim= Button İmage
-        self.butim_saveimage=ctg.CTkImage(Image.open(self.loc_saveimage),size=(50,50))
-        self.butim_addimage=ctg.CTkImage(Image.open(self.loc_addimage),size=(50,50))
-        self.butim_addvoice=ctg.CTkImage(Image.open(self.loc_addvoice),size=(50,50))
-        self.butim_download=ctg.CTkImage(Image.open(self.loc_download),size=(50,50))
-        self.butim_imageframe=ctg.CTkImage(Image.open(self.loc_imageframe),size=((4*(self.widht_size/16)-40),self.height_size/2-60))
-        self.butim_playvoice=ctg.CTkImage(Image.open(self.loc_playvoice),size=(50,50))
-        self.butim_save=ctg.CTkImage(Image.open(self.loc_save),size=(50,50))
-        self.butim_stopvoice=ctg.CTkImage(Image.open(self.loc_stopvoice),size=(50,50))
-        self.butim_voice=ctg.CTkImage(Image.open(self.loc_voice),size=(50,50))
-        self.buttim_key=ctg.CTkImage(Image.open(self.loc_key),size=(40,40))
-        self.butim_clean=ctg.CTkImage(Image.open(self.loc_clean),size=(35,35))
-        self.butim_nonshow=ctg.CTkImage(Image.open(self.loc_nonshow),size=(40,40))
-        self.butim_show=ctg.CTkImage(Image.open(self.loc_show),size=(40,40))
-        self.butim_savebutton=ctg.CTkImage(Image.open(self.loc_savebutton),size=(35,35))
+        self.butim_imagetab_saveimage=ctg.CTkImage(Image.open(self.loc_imagetab_saveimage),size=(50,50))
+        self.butim_imagetab_addimage=ctg.CTkImage(Image.open(self.loc_imagetab_addimage),size=(40,40))
+        self.butim_imagetab_imageframe=ctg.CTkImage(Image.open(self.loc_imagetab_imageframe),size=((4*(self.widht_size/16)-40),self.height_size/2-60))
+        self.buttim_general_key=ctg.CTkImage(Image.open(self.loc_general_key),size=(40,40))
+        self.butim_general_clean=ctg.CTkImage(Image.open(self.loc_general_clean),size=(35,35))
+        self.butim_general_nonshow=ctg.CTkImage(Image.open(self.loc_general_nonshow),size=(40,40))
+        self.butim_general_show=ctg.CTkImage(Image.open(self.loc_general_show),size=(40,40))
+        self.butim_general_savebutton=ctg.CTkImage(Image.open(self.loc_general_savebutton),size=(35,35))
 
         #RESİM İÇİNE METİN GİZLEME ALANI İÇİN 
         #frameler
@@ -118,7 +115,7 @@ class MyTabView(ctg.CTkTabview):
         width=(4*(self.widht_size/16))-20,
         height=self.height_size/2-60,
         text="",
-        image=self.butim_imageframe)
+        image=self.butim_imagetab_imageframe)
         self.ilabel_mainimage.grid(row=0,column=0,padx=10,pady=10) 
 
         #fonksiyonlar
@@ -176,11 +173,10 @@ class MyTabView(ctg.CTkTabview):
 
         def event_button_save_image():
             self.loc_file_image=tl_file.saveData(self.image_hide)
-            print(self.loc_file_image)
         #Buttonlar
         self.button_open_image=ctg.CTkButton(
             master=self.frame_button_tabimage,
-            image=self.butim_addimage,
+            image=self.butim_imagetab_addimage,
             width=50,
             height=50,
             text="Open",
@@ -193,7 +189,7 @@ class MyTabView(ctg.CTkTabview):
         
         self.button_save_image=ctg.CTkButton(
             master=self.frame_button_tabimage,
-            image=self.butim_savebutton,
+            image=self.butim_general_savebutton,
             width=50,
             height=50,
             text="Save Image",
@@ -206,7 +202,7 @@ class MyTabView(ctg.CTkTabview):
         
         self.button_hide_text=ctg.CTkButton(
             master=self.frame_button_tabtextbox,
-            image=self.butim_nonshow,
+            image=self.butim_general_nonshow,
             width=50,
             height=50,
             text="Hide Text",
@@ -219,7 +215,7 @@ class MyTabView(ctg.CTkTabview):
 
         self.button_show_text=ctg.CTkButton(
             master=self.frame_button_tabtextbox,
-            image=self.butim_show,
+            image=self.butim_general_show,
             width=50,
             height=50,
             text="Show Text",
@@ -232,7 +228,7 @@ class MyTabView(ctg.CTkTabview):
 
         self.button_clear_text=ctg.CTkButton(
             master=self.frame_button_tabtextbox,
-            image=self.butim_clean,
+            image=self.butim_general_clean,
             width=50,
             height=50,
             text="Clear Text",
@@ -246,7 +242,7 @@ class MyTabView(ctg.CTkTabview):
 
         self.button_unlock_key=ctg.CTkButton(
             master=self.frame_text_key,
-            image=self.buttim_key,
+            image=self.buttim_general_key,
             width=50,
             height=50,
             text="Unlock Text",
