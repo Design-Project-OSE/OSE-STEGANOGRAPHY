@@ -8,6 +8,7 @@ info=Get_Info()
 tl_file=File_Tool()
 cry=Cryptograph()
 stg=Steganografy()
+voice_h=Voice_Hide()
 class App(ctg.CTk):
 
     def __init__(self):
@@ -233,14 +234,6 @@ class MyTabView(ctg.CTkTabview):
         def event_button_clear_text():
             self.entry.delete("0.0","end")
 
-        def event_button_encrypt():
-            self.key=cry.get_key()
-            self.msg_byt=cry.transform_bytes(self.entry.get("0.0","end"))
-            self.msg_enc=cry.encrypt_msg(self.msg_byt,self.key)
-            self.entry.delete("0.0","end")
-            self.entry_key.delete(0,"end")
-            self.entry_key.insert(0,self.key.decode('utf-8'))
-            self.entry.insert("end",f"{self.msg_enc.decode('utf-8')}")
 
         def event_button_hide_text():
             self.key=cry.get_key()
@@ -384,18 +377,56 @@ class MyTabView(ctg.CTkTabview):
         self.buttim_voicetab_stop=ctg.CTkImage(Image.open(self.loc_voicetab_stop),size=(40,40))
         self.buttim_voicetab_resume=ctg.CTkImage(Image.open(self.loc_voicetab_resume),size=(40,40))
         self.buttim_voicetab_addvoice=ctg.CTkImage(Image.open(self.loc_voicetab_addvoice),size=(40,40))
-        #buton eventleri 
+        #buton event
         def event_button_voicetab_play():
-            print("")
+            voice_h.voice_play(self.loc_voice_file)
 
         def event_button_voicetab_pause():
-            print("")
+            voice_h.voice_pause()
 
         def event_button_voicetab_stop():
-            print("")
+            voice_h.voice_stop()
 
         def event_button_voicetab_resume():
-            print("")
+            voice_h.voice_resume()
+        def event_button_hidevoicetab_play():
+            voice_h.voice_play(self.loc_voice_save)
+
+        def event_button_hidevoicetab_pause():
+            voice_h.voice_pause()
+
+        def event_button_hidevoicetab_stop():
+            voice_h.voice_stop()
+
+        def event_button_hidevoicetab_resume():
+            voice_h.voice_resume()
+        def event_voicetab_open_file():
+            self.loc_voice_file=voice_h.voice_open_file()
+        def event_voicetab_save_file():
+            self.loc_voice_save=voice_h.voice_save_file(self.song,self.frame_modifield)
+        def event_button_voice_unlock():
+            self.voice_unlock_key=cry.transform_bytes(self.voice_entry_key.get())
+            self.voice_unlock_text=cry.transform_bytes(self.voice_textbox.get("0.0","end"))
+            self.voice_unlock_decrypt=cry.decrypt_msg(self.voice_unlock_text,self.voice_unlock_key)
+            self.voice_textbox.delete("0.0","end")
+            self.voice_textbox.insert("end",self.unlock_decrypt.decode("utf-8"))
+        def event_button_voice_hidetext():
+            self.button_hidevoice_pause.configure(state="normal")
+            self.button_hidevoice_play.configure(state="normal")
+            self.button_hidevoice_resume.configure(state="normal")
+            self.button_hidevoice_stop.configure(state="normal")
+            self.voice_key=cry.get_key()
+            self.voice_entry_key.delete("0.0","end")
+            self.voice_entry_key.configure(text=bytes(self.voice_key.encoding("utf-8")))
+            self.voice_encrypt_byte=cry.transform_bytes(self.voice_textbox.get("0.0","end"))
+            self.voice_encrypt=cry.encrypt_msg(self.voice_encrypt_byte,self.voice_key)
+            voice_h.voice_hide(self.loc_voice_file,self.voice_encrypt)
+        def event_button_voice_showtext():
+            self.voice_msg=voice_h.voice_show()
+            self.voice_textbox.configure(text=self.voice_msg)
+        def event_button_voice_cleartext():
+            self.voice_textbox.delete("0.0","end")
+
         #voice button
         self.label_musicname1=ctg.CTkLabel(master=self.frame_voice_music,text="Music Name",width=50,height=0)
         self.label_musicname1.grid(row=0,column=0,padx=5,pady=5)
@@ -460,29 +491,6 @@ class MyTabView(ctg.CTkTabview):
 
         self.label1=ctg.CTkLabel(master=self.frame_hidevoice_music,text="",width=50,height=0)
         self.label1.grid(row=1,column=0,padx=5,pady=5)
-        def event_button_hidevoicetab_play():
-            print("")
-
-        def event_button_hidevoicetab_pause():
-            print("")
-
-        def event_button_hidevoicetab_stop():
-            print("")
-
-        def event_button_hidevoicetab_resume():
-            print("")
-        def event_voicetab_open_file():
-            print()
-        def event_voicetab_save_file():
-            print()
-        def event_button_voice_unlock():
-            print()
-        def event_button_voice_hidetext():
-            print("")
-        def event_button_voice_showtext():
-            print("")
-        def event_button_voice_cleartext():
-            print("") 
 
         self.button_hidevoice_play=ctg.CTkButton(
             master=self.frame_hidevoice_music,
@@ -573,15 +581,15 @@ class MyTabView(ctg.CTkTabview):
         self.voice_textbox.grid(row=0,column=0,padx=5,pady=5)
 
         #Entry 
-        self.entry_key=ctg.CTkEntry(master=self.frame_voice_key,placeholder_text="key",width=((4*(self.widht_size/16))-20)/2,height=50,text_color="#A5D7E8",font=("Open Sans",16))
-        self.entry_key.grid(row=1,column=0,padx=5,pady=5)
+        self.voice_entry_key=ctg.CTkEntry(master=self.frame_voice_key,placeholder_text="key",width=((4*(self.widht_size/16))-20)/2,height=50,text_color="#A5D7E8",font=("Open Sans",16))
+        self.voice_entry_key.grid(row=1,column=0,padx=5,pady=5)
 
         self.button_voice_unlock=ctg.CTkButton(
             master=self.frame_voice_key,
             image=self.buttim_general_key,
             width=50,
             height=50,
-            text="Unlock",
+            text="Unlock Text",
             text_color="#0174BE",
             font=("Open Sans",16),
             command=event_voicetab_save_file,

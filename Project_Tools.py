@@ -4,6 +4,8 @@ from PIL import Image
 import webbrowser
 import pyautogui
 from tkinter import filedialog as fd
+from pygame import mixer
+import wave
 class File_Tool:
     def open_link(self,link):
         super().__init__()
@@ -11,16 +13,15 @@ class File_Tool:
     count=1
     def open_file(self):
         super().__init__()
-        try:
-            self.loc_file=fd.askopenfilename(initialdir=os.getcwd(),  
-                                                title='Open Image File', 
-                                                filetypes=(("PNG File", "*.png"), 
-                                                            ("JPG File", "*.jpg"), 
-                                                            ("JPEG Fİle", "*.jpeg"), ("All Files", "*.*")))
+
+        self.loc_file=fd.askopenfilename(initialdir=os.getcwd(),  
+                                            title='Open Image File', 
+                                            filetypes=(("PNG File", "*.png"), 
+                                                        ("JPG File", "*.jpg"), 
+                                                        ("JPEG Fİle", "*.jpeg"), ("All Files", "*.*")))
         
 
-        except:
-            messagebox.showwarning("warning", "You didn't pick an image! Please choose an image")
+
         return self.loc_file
 
     def saveData(self,save_file):
@@ -82,4 +83,28 @@ class Cryptograph():
         fernet=Fernet(key)
         return fernet.decrypt(msg)
 
+class Voice_Hide():
+    def voice_open_file(self):#Dosya açma fonksiyonu return ile açılan dosyanın konumunu geri döndürmeniz gerekiyor mp3,wav formatlarını desteklesin
+        return 
 
+    def voice_save_file(self):#Dosyayu kaydetme fonksiyonu return ile dosya konumu geri döndirmeniz gerekiyor
+
+        return 
+    
+    def voice_play(self):#Müzik Play butonu ile çalışacak fonksiyon
+        return
+
+    def voice_stop(self):#Müzik Stop butonu ile çalışacak fonksiyon
+        return
+
+    def voice_pause(self):#Müzik Pause ile çalışacak fonksiyon
+        return
+
+    def voice_resume(self):#Müzik Resume butonu ile çalışacak fonksiyon
+        return
+
+    def voice_hide(self,music_loc,message):#Müziğin içine bilginin gizlendiği fonksiyon music_loc=müziğin konumu ve message= gizlenecek mesajı arayüzden iletecem bu tuşa bastıktan sonra save butonuna tıklanması lazım
+        return 
+
+    def voice_show(self):#gizlenen mesajı açığa çıkaran fonksiyon
+        return 
