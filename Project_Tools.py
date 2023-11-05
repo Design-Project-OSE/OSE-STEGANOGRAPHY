@@ -1,10 +1,13 @@
 import os
 import CTkMessagebox as messagebox
 from PIL import Image
-
+import webbrowser
 import pyautogui
 from tkinter import filedialog as fd
 class File_Tool:
+    def open_link(self,link):
+        super().__init__()
+        webbrowser.open(link, new=2)
     count=1
     def open_file(self):
         super().__init__()

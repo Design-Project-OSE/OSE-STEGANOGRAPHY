@@ -4,15 +4,18 @@ from PIL import Image
 from Project_Tools import * 
 
 
-
 info=Get_Info()
 tl_file=File_Tool()
 cry=Cryptograph()
 stg=Steganografy()
 class App(ctg.CTk):
+
     def __init__(self):
         super().__init__()
         #Bilgisayarın ekran boyutu bilgisini alıyor
+
+        def event_link(link):
+            return webbrowser.open(link, new=2)
         
         self.widht_size,self.height_size=info.screen_size()
 
@@ -38,7 +41,16 @@ class App(ctg.CTk):
         self.tab_view = MyTabView(master=self.frame_tabview,width=(3*(self.widht_size/4))-60,height=self.height_size-40)
         self.tab_view.grid(row=0, column=0, padx=10, pady=10)
 
-        #Logo ekleme
+        self.frame_name0=ctg.CTkFrame(master=self.frame_main,width=(self.widht_size/4)-20,height=60)
+        self.frame_name0.grid(row=1,column=0,padx=10,pady=10)
+
+        self.frame_name1=ctg.CTkFrame(master=self.frame_main,width=(self.widht_size/4)-20,height=60)
+        self.frame_name1.grid(row=2,column=0,padx=10,pady=10)
+
+        self.frame_name2=ctg.CTkFrame(master=self.frame_main,width=(self.widht_size/4)-20,height=60)
+        self.frame_name2.grid(row=3,column=0,padx=10,pady=10)
+
+        #Logo ekleme ve resimler
         self.loc_main_logo="Project_Images\\logo.png"
         self.image_logo=ctg.CTkImage(Image.open(self.loc_main_logo),size=((self.widht_size/4),(self.height_size-20)/4))
         self.ilabel_image_logo=ctg.CTkLabel(master=self.frame_main,
@@ -47,6 +59,90 @@ class App(ctg.CTk):
         width=(self.widht_size/4),
         height=((self.height_size-20)/4))
         self.ilabel_image_logo.grid(row=0,column=0,padx=10,pady=10)
+
+        self.loc_github="Project_Images\\github.png"
+        self.loc_linkedin="Project_Images\\linkedin.png"
+        self.image_github=ctg.CTkImage(Image.open(self.loc_github),size=(50,50))
+        self.image_linkedin=ctg.CTkImage(Image.open(self.loc_linkedin),size=(50,50))
+
+        #Button ve labelllar
+        self.label_name0=ctg.CTkLabel(master=self.frame_name0,text="Sinan Uyğun",width=20,height=100,font=("Open Sans",21),text_color="#0174BE")
+        self.label_name0.grid(row=0,column=0,padx=18,pady=10)
+        def event_git_name0():
+            tl_file.open_link("https://github.com/YELBEGEN7")
+        self.button_git_name0=ctg.CTkButton(
+            master=self.frame_name0,
+            width=50,
+            height=50,
+            image=self.image_github,
+            text="",
+            command=event_git_name0
+        )        
+        self.button_git_name0.grid(row=0,column=1,padx=10,pady=10)
+        def event_lin_name0():
+            tl_file.open_link("https://linkedin.com/in/sinanuygun/")
+        self.button_lin_name0=ctg.CTkButton(
+            master=self.frame_name0,
+            width=50,
+            height=50,
+            image=self.image_linkedin,
+            text="",
+            command=event_lin_name0
+        )        
+        self.button_lin_name0.grid(row=0,column=2,padx=10,pady=10)
+
+        self.label_name1=ctg.CTkLabel(master=self.frame_name1,text="Onur Karakaya",width=20,height=100,font=("Open Sans",21),text_color="#0174BE")
+        self.label_name1.grid(row=0,column=0,padx=10,pady=10)
+        def event_git_name1():
+            tl_file.open_link("https://github.com/OnuurKrky")
+        self.button_git_name1=ctg.CTkButton(
+            master=self.frame_name1,
+            width=50,
+            height=50,
+            image=self.image_github,
+            text="",
+            command=event_git_name1
+        )        
+        self.button_git_name1.grid(row=0,column=1,padx=10,pady=10)
+        def event_lin_name1():
+            tl_file.open_link("https://linkedin.com/in/onur-karakaya-815517228/")
+        self.button_lin_name1=ctg.CTkButton(
+            master=self.frame_name1,
+            width=50,
+            height=50,
+            image=self.image_linkedin,
+            text="",
+            command=event_lin_name1
+        )        
+        self.button_lin_name1.grid(row=0,column=2,padx=10,pady=10)
+
+        self.label_name2=ctg.CTkLabel(master=self.frame_name2,text="Emre Yörük",width=20,height=100,font=("Open Sans",21),text_color="#0174BE")
+        self.label_name2.grid(row=0,column=0,padx=22,pady=10)
+        def event_git_name2():
+            tl_file.open_link("https://github.com/emreyoruk0")
+        self.button_git_name1=ctg.CTkButton(
+            master=self.frame_name2,
+            width=50,
+            height=50,
+            image=self.image_github,
+            text="",
+            command=event_git_name2
+        )        
+        self.button_git_name1.grid(row=0,column=1,padx=10,pady=10)
+        def event_lin_name2():
+            tl_file.open_link("https://linkedin.com/in/emreyorukk/")
+        self.button_lin_name2=ctg.CTkButton(
+            master=self.frame_name2,
+            width=50,
+            height=50,
+            image=self.image_linkedin,
+            text="",
+            command=event_lin_name2
+        )        
+        self.button_lin_name2.grid(row=0,column=2,padx=10,pady=10)
+
+
+     
 
 
 class MyTabView(ctg.CTkTabview):
@@ -253,7 +349,289 @@ class MyTabView(ctg.CTkTabview):
         )
         self.button_unlock_key.grid(row=0,column=1,padx=5,pady=5)
 
-       
+       #Voice tab alanı
+        self.frame_musicplayer=ctg.CTkFrame(master=self.tab(self.name_tab_voice),width=(4*(self.widht_size/16)),height=self.height_size/2-40)
+        self.frame_musicplayer.grid(row=0,column=0,padx=10,pady=10)
+
+        self.frame_voice_music=ctg.CTkFrame(master=self.frame_musicplayer,width=(4*(self.widht_size/16)),height=self.height_size/2-40)
+        self.frame_voice_music.grid(row=0,column=0,padx=10,pady=10)
+
+        self.frame_hidevoice_music=ctg.CTkFrame(master=self.frame_musicplayer,width=(4*(self.widht_size/16)),height=self.height_size/2-40)
+        self.frame_hidevoice_music.grid(row=1,column=0,padx=10,pady=10)
+
+        self.frame_voice_button=ctg.CTkFrame(master=self.tab(self.name_tab_voice),width=(4*(self.widht_size/16)),height=self.height_size/2-40)
+        self.frame_voice_button.grid(row=1,column=0,padx=10,pady=10)
+
+        self.frame_voice_textbox=ctg.CTkFrame(master=self.tab(self.name_tab_voice),width=(4*(self.widht_size/16)),height=70)
+        self.frame_voice_textbox.grid(row=0,column=1,padx=10,pady=10)
+
+        self.frame_voice_textbox_button=ctg.CTkFrame(master=self.tab(self.name_tab_voice),width=(4*(self.widht_size/16)),height=self.height_size/2-40)
+        self.frame_voice_textbox_button.grid(row=1,column=1,padx=10,pady=10)
+
+        self.frame_voice_key=ctg.CTkFrame(master=self.frame_voice_textbox,width=(4*(self.widht_size/16)),height=50)
+        self.frame_voice_key.grid(row=1,column=0,padx=10,pady=10)
+        #voice resim location
+        self.loc_voicetab_play="Project_Images\\play_voice.png"
+        self.loc_voicetab_stop="Project_Images\\stop_voice.png"
+        self.loc_voicetab_pause="Project_Images\\pause_voice.png"
+        self.loc_voicetab_resume="Project_Images\\resume_voice.png"
+        self.loc_voicetab_addvoice="Project_Images\\add_voice.png"
+
+
+        #butim= buton image
+        self.buttim_voicetab_play=ctg.CTkImage(Image.open(self.loc_voicetab_play),size=(40,40))
+        self.buttim_voicetab_pause=ctg.CTkImage(Image.open(self.loc_voicetab_pause),size=(40,40))
+        self.buttim_voicetab_stop=ctg.CTkImage(Image.open(self.loc_voicetab_stop),size=(40,40))
+        self.buttim_voicetab_resume=ctg.CTkImage(Image.open(self.loc_voicetab_resume),size=(40,40))
+        self.buttim_voicetab_addvoice=ctg.CTkImage(Image.open(self.loc_voicetab_addvoice),size=(40,40))
+        #buton eventleri 
+        def event_button_voicetab_play():
+            print("")
+
+        def event_button_voicetab_pause():
+            print("")
+
+        def event_button_voicetab_stop():
+            print("")
+
+        def event_button_voicetab_resume():
+            print("")
+        #voice button
+        self.label_musicname1=ctg.CTkLabel(master=self.frame_voice_music,text="Music Name",width=50,height=0)
+        self.label_musicname1.grid(row=0,column=0,padx=5,pady=5)
+
+        self.label0=ctg.CTkLabel(master=self.frame_voice_music,text="",width=50,height=0)
+        self.label0.grid(row=1,column=0,padx=5,pady=5)
+
+        self.button_voice_play=ctg.CTkButton(
+            master=self.frame_voice_music,
+            image=self.buttim_voicetab_play,
+            width=50,
+            height=50,
+            text="Play",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_voicetab_play,
+            fg_color="#181D31",
+        )
+        self.button_voice_play.grid(row=1,column=1,padx=5,pady=5)
+
+        self.button_voice_pause=ctg.CTkButton(
+            master=self.frame_voice_music,
+            image=self.buttim_voicetab_pause,
+            width=50,
+            height=50,
+            text="Pause",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_voicetab_pause,
+            fg_color="#181D31",
+        )
+        self.button_voice_pause.grid(row=2,column=0,padx=5,pady=5)
+
+        self.button_voice_stop=ctg.CTkButton(
+            master=self.frame_voice_music,
+            image=self.buttim_voicetab_stop,
+            width=50,
+            height=50,
+            text="Pause",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_voicetab_stop,
+            fg_color="#181D31",
+        )
+        self.button_voice_stop.grid(row=2,column=1,padx=5,pady=5)
+
+        self.button_voice_resume=ctg.CTkButton(
+            master=self.frame_voice_music,
+            image=self.buttim_voicetab_resume,
+            width=50,
+            height=50,
+            text="Resume",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_voicetab_resume,
+            fg_color="#181D31",
+        )
+        self.button_voice_resume.grid(row=2,column=2,padx=5,pady=5)
+
+        self.label_musicname=ctg.CTkLabel(master=self.frame_hidevoice_music,text="Hide Music Name",width=50,height=0)
+        self.label_musicname.grid(row=0,column=0,padx=5,pady=5)
+
+        self.label1=ctg.CTkLabel(master=self.frame_hidevoice_music,text="",width=50,height=0)
+        self.label1.grid(row=1,column=0,padx=5,pady=5)
+        def event_button_hidevoicetab_play():
+            print("")
+
+        def event_button_hidevoicetab_pause():
+            print("")
+
+        def event_button_hidevoicetab_stop():
+            print("")
+
+        def event_button_hidevoicetab_resume():
+            print("")
+        def event_voicetab_open_file():
+            print()
+        def event_voicetab_save_file():
+            print()
+        def event_button_voice_unlock():
+            print()
+        def event_button_voice_hidetext():
+            print("")
+        def event_button_voice_showtext():
+            print("")
+        def event_button_voice_cleartext():
+            print("") 
+
+        self.button_hidevoice_play=ctg.CTkButton(
+            master=self.frame_hidevoice_music,
+            image=self.buttim_voicetab_play,
+            width=50,
+            height=50,
+            text="Play",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_hidevoicetab_play,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_hidevoice_play.grid(row=1,column=1,padx=5,pady=5)
+
+        self.button_hidevoice_pause=ctg.CTkButton(
+            master=self.frame_hidevoice_music,
+            image=self.buttim_voicetab_pause,
+            width=50,
+            height=50,
+            text="Pause",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_hidevoicetab_pause,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_hidevoice_pause.grid(row=2,column=0,padx=5,pady=5)
+
+        self.button_hidevoice_stop=ctg.CTkButton(
+            master=self.frame_hidevoice_music,
+            image=self.buttim_voicetab_stop,
+            width=50,
+            height=50,
+            text="Pause",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_hidevoicetab_stop,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_hidevoice_stop.grid(row=2,column=1,padx=5,pady=5)
+
+        self.button_hidevoice_resume=ctg.CTkButton(
+            master=self.frame_hidevoice_music,
+            image=self.buttim_voicetab_resume,
+            width=50,
+            height=50,
+            text="Resume",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_hidevoicetab_resume,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_hidevoice_resume.grid(row=2,column=2,padx=5,pady=5)
+
+        self.button_voice_openfile=ctg.CTkButton(
+            master=self.frame_voice_button,
+            image=self.buttim_voicetab_addvoice,
+            width=50,
+            height=50,
+            text="Open Voice",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_voicetab_open_file,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_voice_openfile.grid(row=0,column=0,padx=5,pady=5)  
+
+        self.button_voice_savefile=ctg.CTkButton(
+            master=self.frame_voice_button,
+            image=self.butim_general_savebutton,
+            width=50,
+            height=50,
+            text="Save Voice",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_voicetab_save_file,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_voice_savefile.grid(row=0,column=1,padx=5,pady=5)  
+
+        #textbox
+        self.voice_textbox=ctg.CTkTextbox(master=self.frame_voice_textbox,width=(4*(self.widht_size/16))-20,height=(self.height_size/2-120),text_color="#A5D7E8",font=("Open Sans",16))
+        self.voice_textbox.grid(row=0,column=0,padx=5,pady=5)
+
+        #Entry 
+        self.entry_key=ctg.CTkEntry(master=self.frame_voice_key,placeholder_text="key",width=((4*(self.widht_size/16))-20)/2,height=50,text_color="#A5D7E8",font=("Open Sans",16))
+        self.entry_key.grid(row=1,column=0,padx=5,pady=5)
+
+        self.button_voice_unlock=ctg.CTkButton(
+            master=self.frame_voice_key,
+            image=self.buttim_general_key,
+            width=50,
+            height=50,
+            text="Unlock",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_voicetab_save_file,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_voice_unlock.grid(row=1,column=1,padx=5,pady=5) 
+
+
+        self.button_voice_hidetext=ctg.CTkButton(
+            master=self.frame_voice_textbox_button,
+            image=self.butim_general_nonshow,
+            width=50,
+            height=50,
+            text="Hide Text",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_voice_hidetext,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_voice_hidetext.grid(row=0,column=0,padx=5,pady=5)  
+
+        self.button_voice_showtext=ctg.CTkButton(
+            master=self.frame_voice_textbox_button,
+            image=self.butim_general_show,
+            width=50,
+            height=50,
+            text="Show Text",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_voice_showtext,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_voice_showtext.grid(row=0,column=1,padx=5,pady=5)  
+
+        self.button_voice_cleartext=ctg.CTkButton(
+            master=self.frame_voice_textbox_button,
+            image=self.butim_general_clean,
+            width=50,
+            height=50,
+            text="Clear Text",
+            text_color="#0174BE",
+            font=("Open Sans",16),
+            command=event_button_voice_cleartext,
+            fg_color="#181D31",
+            state="disable"
+        )
+        self.button_voice_cleartext.grid(row=0,column=2,padx=5,pady=5)  
 
 
 app = App()
