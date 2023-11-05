@@ -1,7 +1,7 @@
 import customtkinter as ctg
 from tkinter import messagebox
 from PIL import Image
-from Project_Tools import * 
+from OSE_Tools import * 
 
 
 info=Get_Info()
