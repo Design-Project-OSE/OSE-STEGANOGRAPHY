@@ -398,10 +398,17 @@ class MyTabView(ctg.CTkTabview):
         def event_button_hidevoicetab_stop():
             voice_h.voice_stop()
 
+        def event_button_convert_wav():
+            voice_h.voice_wav_convert()
+
         def event_button_hidevoicetab_resume():
             voice_h.voice_resume()
+
         def event_voicetab_open_file():
             self.loc_voice_file=voice_h.voice_open_file()
+            self.music_name=voice_h.name_check(self.loc_voice_file)
+            self.label_musicname1.configure(text=self.music_name)
+
         def event_voicetab_save_file():
             self.loc_voice_save=voice_h.voice_save_file(self.song,self.frame_modifield)
         def event_button_voice_unlock():
@@ -557,8 +564,7 @@ class MyTabView(ctg.CTkTabview):
             text_color="#0174BE",
             font=("Open Sans",16),
             command=event_voicetab_open_file,
-            fg_color="#181D31",
-            state="disable"
+            fg_color="#181D31"
         )
         self.button_voice_openfile.grid(row=0,column=0,padx=5,pady=5)  
 
@@ -571,8 +577,7 @@ class MyTabView(ctg.CTkTabview):
             text_color="#0174BE",
             font=("Open Sans",16),
             command=event_voicetab_save_file,
-            fg_color="#181D31",
-            state="disable"
+            fg_color="#181D31"
         )
         self.button_voice_savefile.grid(row=0,column=1,padx=5,pady=5)  
 
@@ -594,7 +599,6 @@ class MyTabView(ctg.CTkTabview):
             font=("Open Sans",16),
             command=event_voicetab_save_file,
             fg_color="#181D31",
-            state="disable"
         )
         self.button_voice_unlock.grid(row=1,column=1,padx=5,pady=5) 
 
@@ -609,7 +613,6 @@ class MyTabView(ctg.CTkTabview):
             font=("Open Sans",16),
             command=event_button_voice_hidetext,
             fg_color="#181D31",
-            state="disable"
         )
         self.button_voice_hidetext.grid(row=0,column=0,padx=5,pady=5)  
 
@@ -623,7 +626,6 @@ class MyTabView(ctg.CTkTabview):
             font=("Open Sans",16),
             command=event_button_voice_showtext,
             fg_color="#181D31",
-            state="disable"
         )
         self.button_voice_showtext.grid(row=0,column=1,padx=5,pady=5)  
 
@@ -637,9 +639,10 @@ class MyTabView(ctg.CTkTabview):
             font=("Open Sans",16),
             command=event_button_voice_cleartext,
             fg_color="#181D31",
-            state="disable"
         )
         self.button_voice_cleartext.grid(row=0,column=2,padx=5,pady=5)  
+
+
 
 
 app = App()

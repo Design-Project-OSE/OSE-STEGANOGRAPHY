@@ -1,95 +1,53 @@
 import wave
 import os
-from tkinter import*  
-import tkinter as tk
-from tkinter import  filedialog
-from pygame import mixer
-from PIL import Image, ImageTk
-
-
-
-root = tk.Tk()
-root.title("deneme")
-root.geometry("920x670+290+85")
-root.configure(bg='#0f1a2b')
-root.resizable(False, False)
-
-mixer.init()
-
-playlist = tk.Listbox(root)
-playlist.pack(fill="both", expand=True)  # Liste kutusunu dolgu ile doldurup genişletin
-
-#dosya açım işlemleri
-def open_folder():
-    path=filedialog.askdirectory()
-    if path:
-        os.chdir(path)
-        songs=os.listdir(path)
-        for song in songs:
-            if song.endswith(".wav"):
-                playlist.insert(END,song)
-        
-def open_folder_button_click():
-    open_folder()
-    
-# mesajı gömme butonu
-
-
-# Müzik çalma fonksiyonu
-def play_song():
-    music_name=playlist.get(ACTIVE)
-    print(music_name[0:-4])
-    mixer.music.load(playlist.get(ACTIVE))
-    mixer.music.play()
-    
-
-# Play Button
-play_image = Image.open("play_icon.png")
-play_image = play_image.resize((30, 30), Image.ANTIALIAS)
-play_icon = ImageTk.PhotoImage(play_image)
-play_button = tk.Button(root, image=play_icon, bg="#FFFFFF", bd=0 , command=play_song)
-play_button.place(x=400, y=500)
-
-# Stop Button
-stop_image = Image.open("stop_icon.png")
-stop_image = stop_image.resize((30, 30), Image.ANTIALIAS)
-stop_icon = ImageTk.PhotoImage(stop_image)
-stop_button = tk.Button(root, image=stop_icon, bg="#FFFFFF", bd=0,command=mixer.music.stop)
-stop_button.place(x=450, y=500)
-
-# Open Folder Butonu
-tk.Button(root, text="Open Folder", width=10, height=1, font=("arial", 10, "bold"), fg="white", bg="#21b3de", command=open_folder_button_click).place(x=50, y=212)
-
-# textbox
-text_box = tk.Text(root, height=10, width=40)
-text_box.pack()
-text_box.place(x=350, y=150)
-
-# Mesajı göm butonu
-tk.Button(root, text="Mesajı Göm", width=10, height=1, font=("arial", 10, "bold"), fg="white", bg="#21b3de").place(x=350, y=350)
-
-
-root.mainloop()
 
 # Şu anki çalışma dizinini al
 current_directory = os.getcwd()
-# Alt klasör adını belirle
-subfolder = "Project_Voice"
+
 # Ses dosyasının yolunu birleştir
-path_to_audio = os.path.join(current_directory, subfolder, "song.wav")
-# Ses dosyasını aç
+path_to_audio = os.path.join(current_directory,"Project_Voice", "song.wav")
+
+
+# Ses dosyasını 'rb' read binary modunda açar
 song = wave.open(path_to_audio, mode='rb')
-# Read frames and convert to byte array
+
+
+# Ses dosyası frame'lerden oluşur . song.getnframes ile alınan frameler readframe ile okunur ,
+# Listeye dönüştürüldükten sonra frame_bytes adlı bytearray'e atanır.
 frame_bytes = bytearray(list(song.readframes(song.getnframes())))
 
-# The "secret" text message
+# Gizlenmek istenen text mesajı string adlı değişkene atanır.
 string = 'Peter Parker is the Spiderman!' #textbox'dan alacak
-# Append dummy data to fill out rest of the bytes. Receiver shall detect and remove these characters.
+
+# Bu kod satırı, gizlenen metin mesajının ses dosyasına eklenmeden önce boyutunu ayarlamak için kullanılır. 
+# Bu işlem, gizlenecek metin mesajının ses dosyasına sığmasını sağlar. Daha detaylı bilgi için aşağıyı oku.
+'''
+# len(frame_bytes) = ses dosyasinin kaç bayttan oluştuğu bilgisini döndürür.
+# len(string)*8*8  = gizlenmek istenen mesajin bit cinsinden boyutu
+# (len(frame_bytes) - (len(string) * 8 * 8)) / 8  -> ses dosyasi boyutu - gizlenmek istenen mesajin boyutu = kalan boşluk miktari (bayt cinsinden)
+# utf-8 formati 1 karakteri 1 bayt ile ifade ettiğinden kalan boşluklar random bir karakter ile doldurulur(buradaki karakter #)
+'''
 string = string + int((len(frame_bytes) - (len(string) * 8 * 8)) / 8) * '#'
-# Convert text to bit array
+
+# gizlenmek istenen mesaj bit array'e dönüştürülür. Daha detaylı bilgi için aşağıyı oku.
+'''
+ord(i)       : i' karakterinin ascii tam sayi karsiliğini döndürür .
+bin(ord(i))  : ikili sayiya çevirir. -> örneğin 0b1000001 (0b sayinin binary oldugunu gösterir.)
+lstrip('0b') : 0b notasyonunu kaldirir.
+rjust(8, '0'): ikilik sayi 8 bite tamamlanir (bosluk varsa sonunda 0 eklenir.)
+.join(...)   : karakterleri birlestirir -> 0110100100101010010101010000110100 gibi..
+map(...)     : dizeye çevirir -> [0,1,1,0,1,0,0,1....] gibi...
+'''
 bits = list(map(int, ''.join([bin(ord(i)).lstrip('0b').rjust(8, '0') for i in string])))
 
-# Replace LSB of each byte of the audio data by one bit from the text bit array
+
+# Ses dosyasındaki her bir byte'ın en düşük anlamlı (LSB) biti, metin mesajının bitlerine sırasıyla yerleştirilir.
+'''
+(frame_bytes[i] & 254) : ses dosyasinin her bayti 254 (11111110) maskesiyle and'lenir.Bu sayede sadece son bit 0 olur,diğerleri neyse ayni kalir
+(frame_bytes[i] & 254) | bit : çikan sonuc bit ile or'lanir bu sayede gizli mesaj gömülmüş olur.
+daha sonra değiştirilmiş baytlar frame_modified adli yeni bytes veri tipinde tutulur.
+extra bilgi : bytes ile byte_array'in farki bytes immutable (değiştirilemez) , bytearray mutable (değiştirilebilir) olmasidir.
+'''
 for i, bit in enumerate(bits):
     frame_bytes[i] = (frame_bytes[i] & 254) | bit
 # Get the modified bytes
@@ -104,35 +62,41 @@ song.close()
 
 
 
+# -- GİZLENMİŞ METNİ ÇIKARMA --
 
+# Şu anki çalışma dizinini alır
+current_directory = os.getcwd()
 
-# Use wave package (native to Python) for reading the received audio file
-import wave
-song = wave.open("song_embedded.wav", mode='rb')
-# Convert audio to byte array
+# Ses dosyasının yolunu birleştirir
+path_to_audio = os.path.join(current_directory, "Project_Voice", "song.wav") # song.wav dosyası eklenecek . Şuan dizinde yok.
+
+# Ses dosyasını 'rb' read binary modunda açar
+song = wave.open(path_to_audio, mode='rb')
+
+# Bytearray'e dönüstürülür.
 frame_bytes = bytearray(list(song.readframes(song.getnframes())))
 
-# Extract the LSB of each byte
+# Her bir baytin lsb biti ayiklanir.
+# Metni gömerken 255 ile and'lemiştik . Bu işlemin tersini yapıyoruz.
 extracted = [frame_bytes[i] & 1 for i in range(len(frame_bytes))]
-# Convert byte array back to string
+
+# Bytearray'i tekrar string ifadeye dönüştürür. 
+'''
+for i in range(0, len(extracted), 8): Bu döngü, extracted listesindeki bitleri 8'li gruplar halinde işlemek için kullanilir.
+Her döngü adiminda i, 0'dan başlayarak 8'er 8'er artar. Bu, her 8 bitlik grup için bir işlem yapilmasini sağlar.
+
+extracted[i:i+8]: Bu ifade, extracted listesindeki bitlerin 8'li gruplarini seçer. 
+"".join(map(str, extracted[i:i+8])): Her 8 bitlik grup, bir dizeye dönüştürülür ve bu dizedeki bitler birleştirilir
+int(..., 2): Dize olarak temsil edilen ikili (binary) sayi, ondalik (decimal) bir sayiya dönüştürülür.
+chr(...): Dönüştürülen ondalik sayi, ASCII karakter koduna dönüştürülür.
+
+"".join(...): Elde edilen karakterler, bir dize haline getirilir.
+Her bir döngü adiminda elde edilen karakterler, metin mesajinin parçalarini oluşturur.
+'''
 string = "".join(chr(int("".join(map(str,extracted[i:i+8])),2)) for i in range(0,len(extracted),8))
-# Cut off at the filler characters
+# Metnin sonuna eklediğimiz gereksiz karakteri (#) atar.
 decoded = string.split("###")[0]
 
-# Print the extracted text
-print("Sucessfully decoded: "+decoded)
+# Gizli bilgi çıkarılmış text'i basar.
+print("Sucessfully decoded: " + decoded)
 song.close()
-
-# Yeni ses dosyasını "Project_Voice" alt klasörüne kaydet
-output_path = os.path.join(current_directory, subfolder, "song_embedded.wav")
-with wave.open(output_path, 'wb') as fd:
-    fd.setparams(song.getparams())
-    fd.writeframes(frame_modified)
-song.close()
-
-# Write bytes to a new wave audio file
-with wave.open('song_embedded.wav', 'wb') as fd:
-    fd.setparams(song.getparams())
-    fd.writeframes(frame_modified)
-
-bunun yerine yukardakini yaz
