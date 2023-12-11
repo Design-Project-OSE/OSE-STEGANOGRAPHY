@@ -6,8 +6,8 @@ name_detect=Name_Detect()
 class Convert_Media():
 
     def cnv_mp3_wav(self,patch):
-        music_patch="Project_Voice"
-        wav_name=name_detect.file_name_controller(music_patch,'wavfile')
+        music_patch="Project_Tools\\"
+        wav_name=name_detect.file_name_controller(music_patch,'wavfile','.wav')
         data,samplerate=sf.read(patch)
         sf.write(wav_name,data,samplerate)
         return 

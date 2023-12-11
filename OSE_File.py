@@ -2,8 +2,8 @@ import os
 import webbrowser
 import pyautogui
 from tkinter import filedialog as fd
-import wave
 import re
+import soundfile as sf
 
 class File_Tool:
 
@@ -42,17 +42,13 @@ class File_Tool:
                                                              ("All Files", "*.*")))
         return patch
 
-    def voice_save_file(self):#Dosyayu kaydetme fonksiyonu return ile dosya konumu geri döndirmeniz gerekiyor
-        current_directory=fd.asksaveasfilename(defaultextension=".mp3",initialdir=os.getcwd(),  
+    def voice_save_file(self,voice,samplerate):#Dosyayu kaydetme fonksiyonu return ile dosya konumu geri döndirmeniz gerekiyor
+        current_directory=fd.asksaveasfilename(defaultextension=".wav",initialdir=os.getcwd(),  
                                                 title='Save Voice File', 
-                                                filetypes=(("mp3 File", "*.mp3"), 
-                                                            ("wav File", "*.wav"), 
+                                                filetypes=(("wav File", "*.wav"), 
+                                                            ("mp3 File", "*.mp3"), 
                                                              ("All Files", "*.*")))
-        with wave.open(current_directory, 'wb') as fd:
-            fd.setparams(song.getparams())
-            fd.writeframes(frame_modified)
-            song.close()
-        return 
+        sf.write(current_directory,voice,samplerate)
 
 
 class Get_Info:
