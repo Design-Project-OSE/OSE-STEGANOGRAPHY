@@ -4,6 +4,9 @@ import pyautogui
 from tkinter import filedialog as fd
 import re
 import soundfile as sf
+import shutil
+from OSE_Voice_Convert import *
+
 
 class File_Tool:
 
@@ -35,7 +38,7 @@ class File_Tool:
 
     
     def voice_open_file(self):#Dosya açma fonksiyonu return ile açılan dosyanın konumunu geri döndürmeniz gerekiyor mp3,wav formatlarını desteklesin
-        patch=fd.askopenfilename(defaultextension=".mp3",initialdir=os.getcwd(),  
+        patch=fd.askopenfilename(defaultextension="*.*",initialdir=os.getcwd(),  
                                                 title='Open Voice File', 
                                                 filetypes=(("mp3 File", "*.mp3"), 
                                                             ("wav File", "*.wav"), 
@@ -55,6 +58,21 @@ class File_Tool:
             output_audio.setparams(audio.getparams())
             output_audio.writeframes(frames)
         return
+    
+    def voice_actor(self,patch):
+        current_directory=fd.asksaveasfilename(defaultextension=".wav",initialdir=os.getcwd(),  
+                                                title='Save Voice File', 
+                                                filetypes=(("wav File", "*.wav"), 
+                                                            ("mp3 File", "*.mp3"), 
+                                                             ("All Files", "*.*")))
+
+        shutil.move(patch,current_directory)
+        return current_directory
+
+    def clear_file(self,pach):
+        shutil.rmtree(path)
+
+
 
 
 class Get_Info:

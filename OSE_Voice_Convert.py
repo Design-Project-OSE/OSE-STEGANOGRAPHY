@@ -12,8 +12,3 @@ class Convert_Media():
         sf.write(wav_name,data,samplerate)
         return wav_name
 
-    def cnv_wav_mp3(self,wav_patch,save_patch):
-        wav_open=AudioSegment.from_wav(wav_patch)
-        mp3_file.export(save_patch,format='mp3')
-        return 
-

@@ -449,11 +449,10 @@ class MyTabView(ctg.CTkTabview):
             self.loc_hidedata_wav=self.loc_voice_wav
 
         def event_voicetab_save_file():
-            self.loc_voice_save=fd.voice_save_file(self.song)
-            
-            self.loc_voice_save_file=fd.voice_save_file()
-            self.hide_music_name=name_detect.name_check(self.loc_voice_save_file)
+            self.loc_hidedata_wav=fd.voice_actor(self.loc_hidedata_wav)
+            self.hide_music_name=name_detect.name_check(self.loc_hidedata_wav)
             self.label_musicname.configure(text=self.hide_music_name)
+            fd.clear_file("Project_Tools\\")
 
         def event_button_voice_unlock():
             self.voice_unlock_key=cry.transform_bytes(self.voice_entry_key.get())
@@ -485,7 +484,6 @@ class MyTabView(ctg.CTkTabview):
 
         def event_button_voice_showtext():
             self.voice_hit,self.voice_key= name_detect.process_message(self.voice_entry_key.get())
-            print("sayı=",self.voice_hit,"\n","metin=",self.voice_key)
             self.hidevoice_msg=v_lsb.showdata(self,self.loc_hidedata_wav,self.voice_hit)
             self.voice_textbox.delete("0.0","end")
             self.voice_textbox.insert("end",self.hidevoice_msg)
