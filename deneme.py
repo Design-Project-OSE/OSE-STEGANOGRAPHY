@@ -44,9 +44,11 @@ def extract_text_from_audio(audio_file, text_length):
     print(f"Gizli metin: '{extracted_text}'")
 
 # Örnek kullanım
-audio_file_path = "hidden_audio.wav"
-text_to_hide = "Sex in my life in cesfsfsdfsfsfsfsfsfsfsfkjkhjkhjkhjk"
+pak="Project_Voice\\Chopin.mp3"
 
+audio_file_path = "hidden_audio.wav"
+text_to_hide = "01=gAAAAABlekeOGGFlEybNVo0DQy_HWnIyzqZ5JYu5GiQR0RLaYajFWZPGsdallSXgMIRIq3PX6Jugc9wDi7_xCTa8H1DMwASy_w===00"
+hide_text_in_audio(pak,text_to_hide)
 # Metni ses dosyasına gizleme
 
 

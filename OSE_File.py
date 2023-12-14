@@ -50,6 +50,12 @@ class File_Tool:
                                                              ("All Files", "*.*")))
         sf.write(current_directory,voice,samplerate)
 
+    def wav_save(self,audio,frames,output_file):
+        with wave.open(output_file, "wb") as output_audio:
+            output_audio.setparams(audio.getparams())
+            output_audio.writeframes(frames)
+        return
+
 
 class Get_Info:
         def open_link(self,link):

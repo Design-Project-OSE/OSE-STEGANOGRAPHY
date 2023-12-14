@@ -1,26 +1,74 @@
 import os
 
 class Name_Detect:
-    def file_name_controller(self,patch,search,extension):
-        list_patch=os.listdir(patch)
-        if len(list_patch)==0:
-            name=patch_search+'0'+'.'+extension
-        else:   
-            last_file=list_patch[-1] 
-            index_start=last_file.rfind(search)
-            index_start=index_start+search.__len__()
-            index_end=last_file.rfind('.')
-            number=last_file[index_start:index_end]
-            number=str(int(number)+1)
-            name=patch+search+number+extension
-        return name
+    def file_name_controller(self,file_path, search_word, file_format):
+        files_in_path = os.listdir(file_path)
+        if not files_in_path:
+            return file_path + search_word + '.' + file_format
+        
+        # Aranacak kelimeyle eşleşen dosya adını kontrol et
+        matched_files = [file_name for file_name in files_in_path if search_word in file_name]
+        
+        if not matched_files:
+            return file_path + search_word + '.' + file_format
+        
+        # Eşleşen bir dosya adı varsa, en sonuncusunu alıp numarasını artır
+        last_matched_file = matched_files[-1]
+        index_start = last_matched_file.rfind(search_word)
+        index_end = last_matched_file.rfind('.')
+        number = last_matched_file[index_start + len(search_word):index_end]
+        
+        if number.isdigit():
+            new_number = str(int(number) + 1)
+        else:
+            # Dosya adından sayısal ifade alınamadı veya boş bir dize geldi, 0'dan başlayarak yeni bir numara oluştur
+            new_number = '1'
+        
+        # Yeni dosya adını oluştur ve döndür
+        new_file_name = file_path + search_word + new_number + '.' + file_format
+        return new_file_name
 
+    def process_message(self,message):
+        index = message.find("=")  
+        if index != -1:  
+            number_str = message[index + 2:] 
+            number = int(number_str)  
+            modified_message = message.replace(number_str, "")  
+            return number, modified_message
+        else:
+            return None, message  
 
     def name_check(self,loc_dir):
         index_start=loc_dir.rfind("/")
         index_final=loc_dir.rfind(".")
         name=loc_dir[index_start+1:index_final]
         return name
+
+    def key_info_write(self,msg,info):
+        info=len(msg)
+        strinfo=str(info)
+        if(len(strinfo)%2==1):
+            strinfo='0'+strinfo
+        msg=strinfo[:len(strinfo)//2]+'='+msg+'='+strinfo[len(strinfo)//2:]
+
+        return msg
+
+    def key_scizor(self,msg):
+        first_index=msg.find('=')
+        msg=msg[first_index+1:]
+        second_index=msg.rfind('=')
+        msg=msg[:second_index]
+        return msg
+
+    def key_info_read(self,msg:str):
+        first_index=msg.find('=')
+        first_numb=msg[:first_index]
+        second_index=msg.rfind('=')
+        second_numb=msg[second_index+1:]
+        numb=first_numb+second_numb
+        numb=int(numb)
+        return numb
+
 
 import soundfile as sf
 import numpy as np

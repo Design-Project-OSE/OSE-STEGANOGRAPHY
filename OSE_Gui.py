@@ -6,7 +6,7 @@ from OSE_Image_Hide import *
 i_lsb=image_Lsb()
 
 from OSE_Voice_Hide import *
-v_lsb=voice_Lsb()
+v_lsb=voice_Lsb
 
 from OSE_File import * 
 info=Get_Info()
@@ -23,6 +23,7 @@ convert=Convert_Media()
 
 from OSE_Tool import *
 name_detect=Name_Detect()
+global cost
 
 class App(ctg.CTk):
 
@@ -424,7 +425,7 @@ class MyTabView(ctg.CTkTabview):
         def event_button_voicetab_resume():
             mdp.voice_resume()
         def event_button_hidevoicetab_play():
-            mdp.voice_play(self.loc_voice_save)
+            mdp.voice_play(self.loc_voice_wav)
 
         def event_button_hidevoicetab_pause():
             mdp.voice_pause()
@@ -444,7 +445,8 @@ class MyTabView(ctg.CTkTabview):
             self.loc_voice_file=fd.voice_open_file()
             self.music_name=name_detect.name_check(self.loc_voice_file)
             self.label_musicname1.configure(text=self.music_name)
-            self.loc_wav_voice=convert.cnv_mp3_wav(self.loc_voice_file)
+            self.loc_voice_wav=convert.cnv_mp3_wav(self.loc_voice_file,"wavfile1")
+            self.loc_hidedata_wav=self.loc_voice_wav
 
         def event_voicetab_save_file():
             self.loc_voice_save=fd.voice_save_file(self.song)
@@ -454,36 +456,39 @@ class MyTabView(ctg.CTkTabview):
             self.label_musicname.configure(text=self.hide_music_name)
 
         def event_button_voice_unlock():
-            self.voice_unlock_text=cry.transform_bytes(self.voice_textbox.get('0.0','end'))
             self.voice_unlock_key=cry.transform_bytes(self.voice_entry_key.get())
-            self.voice_unlock_msg=cry.decrypt_msg(self.voice_unlock_text,self.voice_unlock_key)
-            self.voice_textbox.delete('0.0','end')
-            self.voice_textbox.insert('end',f"{self.voice_unlock_msg.decode('utf-8')}")
+            self.voice_unlock_text=cry.transform_bytes(self.voice_textbox.get("0.0","end"))
+            self.voice_decrypt_text=cry.decrypt_msg(self.voice_unlock_text,self.voice_unlock_key)
+            self.voice_textbox.delete("0.0","end")
+            self.voice_textbox.insert("end",self.voice_decrypt_text)
 
         def event_button_voice_hidetext():
-            self.button_hidevoice_pause.configure(state="normal")
-            self.button_hidevoice_play.configure(state="normal")
-            self.button_hidevoice_resume.configure(state="normal")
-            self.button_hidevoice_stop.configure(state="normal")
-
-            self.voice_textbox.delete('0.0','end')
-            self.voice_entry_key.delete(0,"end")
+            self.button_hidevoice_play.configure(state='normal')
+            self.button_hidevoice_pause.configure(state='normal')
+            self.button_hidevoice_resume.configure(state='normal')
+            self.button_hidevoice_stop.configure(state='normal')
 
             self.voice_key=cry.get_key()
+            self.voice_entry_key.delete(0,"end")
             
-            self.voice_byte_text=cry.transform_bytes(self.voice_textbox.get('0.0','end'))
-            self.voice_hide_text=cry.encrypt_msg(self.voice_byte_text,self.voice_key)
+            self.voice_byt_msg=cry.transform_bytes(self.voice_textbox.get("0.0","end"))
+            self.voice_enc_msg=cry.encrypt_msg(self.voice_byt_msg,self.voice_key)
+            self.voice_textbox.delete("0.0","end")
+            self.voice_textbox.insert("end",self.voice_enc_msg.decode('utf-8'))
 
-            self.voice_entry_key.insert(0,f"{self.voice_key.decode('utf-8')}")
-            self.voice_textbox.insert('end',self.voice_hide_text)
+            self.voice_info=len(self.voice_textbox.get("0.0","end"))
+            self.voice_entry_key.insert("end",f"{self.voice_key.decode('utf-8')}{self.voice_info}")
+
+            self.loc_hidedata_wav=name_detect.file_name_controller("Project_Tools\\","hidewav1","wav")
+            self.hidevoice_patch=v_lsb.hideData(self,self.voice_textbox.get("0.0","end"),self.loc_voice_wav,self.loc_hidedata_wav)
+            
 
         def event_button_voice_showtext():
-            self.voice_get_text=cry.transform_bytes(self.voice_textbox.get('0.0','end'))
-            self.voice_get_key=cry.transform_bytes(self.voice_entry_key.get())
-            self.voice_decrypt_msg=cry.decrypt_msg(self.voice_get_text,self.voice_get_key)
+            self.voice_hit,self.voice_key= name_detect.process_message(self.voice_entry_key.get())
+            self.hidevoice_msg=v_lsb.showdata(self,self.loc_hidedata_wav,self.voice_hit)
+            self.voice_textbox.delete("0.0","end")
+            self.voice_textbox.insert("end",self.hidevoice_msg)
 
-            self.voice_textbox.delete('0.0','end')
-            self.voice_textbox.insert('end',f"{self.voice_decrypt_msg.decode('utf-8')}")
 
         def event_button_voice_cleartext():
             self.voice_textbox.delete("0.0","end")
