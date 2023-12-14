@@ -460,7 +460,7 @@ class MyTabView(ctg.CTkTabview):
             self.voice_unlock_text=cry.transform_bytes(self.voice_textbox.get("0.0","end"))
             self.voice_decrypt_text=cry.decrypt_msg(self.voice_unlock_text,self.voice_unlock_key)
             self.voice_textbox.delete("0.0","end")
-            self.voice_textbox.insert("end",self.voice_decrypt_text)
+            self.voice_textbox.insert("end",self.voice_decrypt_text.decode('utf-8'))
 
         def event_button_voice_hidetext():
             self.button_hidevoice_play.configure(state='normal')
