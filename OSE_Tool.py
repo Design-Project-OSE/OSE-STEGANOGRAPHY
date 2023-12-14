@@ -29,14 +29,19 @@ class Name_Detect:
         return new_file_name
 
     def process_message(self,message):
-        index = message.find("=")  
-        if index != -1:  
-            number_str = message[index + 2:] 
-            number = int(number_str)  
-            modified_message = message.replace(number_str, "")  
-            return number, modified_message
+        index = message.find("=")  # "=" işaretinin konumunu bul
+        if index != -1:  # Eğer "=" işareti bulunduysa
+            number_str = message[index + 1:]  # "=" işaretinden sonrasını al
+            if number_str.isdigit():  # Eğer sayısal bir ifadeyse
+                number_len = len(number_str)
+                modified_message = message[:-number_len]  # Sayısal ifadeyi mesajdan sil
+                return int(number_str), modified_message
+            else:
+                print("Sayısal ifade bulunamadı.")
+                return None, message
         else:
-            return None, message  
+            print("'=' işareti bulunamadı.")
+            return None, message
 
     def name_check(self,loc_dir):
         index_start=loc_dir.rfind("/")

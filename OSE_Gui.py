@@ -485,6 +485,7 @@ class MyTabView(ctg.CTkTabview):
 
         def event_button_voice_showtext():
             self.voice_hit,self.voice_key= name_detect.process_message(self.voice_entry_key.get())
+            print("sayı=",self.voice_hit,"\n","metin=",self.voice_key)
             self.hidevoice_msg=v_lsb.showdata(self,self.loc_hidedata_wav,self.voice_hit)
             self.voice_textbox.delete("0.0","end")
             self.voice_textbox.insert("end",self.hidevoice_msg)
